@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<script src="DomFragment.js"></script>
+	</head>
+	<body>
+		<div id="DomFragementTest"></div>
+		
+		<script>
+			var button = document.createElement('button');
+			button.addEventListener('click', function () {
+				alert("This button was created using DomFragment");
+			});
+			button.innerHTML = 'Click Me'
+			var fragment = new DomFragment("<div><label>Dom fragment button</label>{clickIt}</div>");
+			fragment.set('clickIt', button);
+			fragment.render(document.getElementById('DomFragementTest'));
+		</script>
+	</body>
+</html>
