@@ -3,7 +3,7 @@
 		<script src="DomFragment.js"></script>
 	</head>
 	<body>
-		<div id="DomFragementTest"></div>
+		<div id="DomFragmentTest"></div>
 		
 		<script>
 			var button = document.createElement('button');
@@ -13,7 +13,17 @@
 			button.innerHTML = 'Click Me'
 			var fragment = new DomFragment("<div><label>Dom fragment button</label>{clickIt}</div>");
 			fragment.set('clickIt', button);
-			fragment.render(document.getElementById('DomFragementTest'));
+			fragment.render(document.getElementById('DomFragmentTest'));
+            
+            
+            
+            fragment = new DomFragment("<ul><li>list item one</li>{li2}<li>list item trois</li>{li4}</ul>")
+                            .map({
+                                li2: document.createElement('li'),
+                                li4: document.createElement('li')
+                            }).render(document.getElementById('DomFragmentTest'));
+            fragment.nodes['li2'].innerHTML = "List item 2";
+            fragment.nodes['li4'].innerHTML = "List item IV";
 		</script>
 	</body>
 </html>

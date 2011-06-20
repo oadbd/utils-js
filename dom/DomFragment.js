@@ -1,11 +1,12 @@
 var containerDiv = document.createElement('div'),
-	replaceRegex = /({[a-zA-Z][a-zA-Z0-9_]*})/g;
+	replaceRegex = /(\{[a-zA-Z][a-zA-Z0-9_]*\})/g;
 
 var TextNodeTreeWalker = function (el) {
 	this._index = [0];
 	this._current = el;
 };
 
+// needs implementing to work on IE or any other browser that doesn't support TreeWalkers
 TextNodeTreeWalker.prototype.nextNode = function () {
 	var result = null;
 	while (this._index.length > 0) {
@@ -20,7 +21,7 @@ function createTextNodeWalker(startingEl) {
 		walker = new TextNodeTreeWalker(startingEl);
 	}
 	return walker;
-};
+}
 
 var DomFragment = function (htmlString) {
 	containerDiv.innerHTML = htmlString;
@@ -33,12 +34,13 @@ var DomFragment = function (htmlString) {
 		node = null, 
 		matches = null, 
 		i = 0;
-	while (node = walker.nextNode()) {
+    node = walker.nextNode();
+	while (node) {
 		//cases:
 		// 1) "{foo}"
 		// 2) "abc {foo} bcd {bar} ..."
 		
-		matches = node.nodeValue.match(replaceRegex)
+		matches = node.nodeValue.match(replaceRegex);
 		if (matches) {
 			if (matches.length === 1 && matches[0].length == node.nodeValue.length) {
 				//case 1
@@ -51,6 +53,7 @@ var DomFragment = function (htmlString) {
 				}
 			}
 		}
+        node = walker.nextNode();
 	}
 };
 
@@ -64,6 +67,7 @@ DomFragment.prototype.render = function (el) {
 DomFragment.prototype.set = function (key, el) {
 	if (this.nodes.hasOwnProperty(key)) {
 		this.nodes[key].parentNode.replaceChild(el, this.nodes[key]);
+        this.nodes[key] = el;
 	}
 	return this;
 };
