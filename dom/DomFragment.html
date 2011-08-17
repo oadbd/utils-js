@@ -14,16 +14,20 @@
 			var fragment = new DomFragment("<div><label>Dom fragment button</label>{clickIt}</div>");
 			fragment.set('clickIt', button);
 			fragment.render(document.getElementById('DomFragmentTest'));
-            
-            
-            
-            fragment = new DomFragment("<ul><li>list item one</li>{li2}<li>list item trois</li>{li4}</ul>")
-                            .map({
-                                li2: document.createElement('li'),
-                                li4: document.createElement('li')
-                            }).render(document.getElementById('DomFragmentTest'));
-            fragment.nodes['li2'].innerHTML = "List item 2";
-            fragment.nodes['li4'].innerHTML = "List item IV";
+
+			fragment = new DomFragment("<ul><li>list item one</li>{li2}<li>list item trois</li>{li4}</ul>")
+				.map({
+					li2: document.createElement('li'),
+					li4: document.createElement('li')
+				}).render(document.getElementById('DomFragmentTest'));
+			fragment.nodes['li2'].innerHTML = "List item 2";
+			fragment.nodes['li4'].innerHTML = "List item IV";
+
+			fragment = new DomFragment("<div>Hello, <strong as='name'></strong>!</div>").render(document.getElementById('DomFragmentTest'));
+			fragment.nodes['name'].innerHTML = 'World';
+
+			fragment = new DomFragment("<div>Hello, <strong mapto='name'></strong>!</div>", 'mapto').render(document.getElementById('DomFragmentTest'));
+			fragment.nodes['name'].innerHTML = 'World';
 		</script>
 	</body>
 </html>
