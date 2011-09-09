@@ -20,7 +20,6 @@
 		this.subscribers = [];
 	
 		this.fireCount = 0;
-		this.fireArgs;
 	}
 
 	Event.prototype.on = function (callback) {
@@ -46,7 +45,7 @@
 		if (!this.fireOnce || (this.fireOnce && this.fireCount === 0)) {
 			this.fireCount++;
 			for (i = 0; i < this.subscribers.length; i++) {
-				execEventCallback(this, this.subscribers[i], arguments)
+				execEventCallback(this, this.subscribers[i], arguments);
 			}
 		}
 	};
@@ -60,24 +59,24 @@
 
 	function EventEmitter() {
 		this.__events = {};
-	};
+	}
 
 	EventEmitter.prototype.on = function (eventName, callback) {
 		var event = getEvent(this.__events, eventName);
 		event.on(callback);
 		return this;
-	}
+	};
 	EventEmitter.prototype.emit = function (eventName) {
 		var event = getEvent(this.__events, eventName);
 		event.fire.apply(event, Array.prototype.splice.call(arguments, 1));
 		return this;
-	}
+	};
 	EventEmitter.mixin = function (obj) {
 		var emitter = new EventEmitter();
 		obj.on = function () { emitter.on.apply(emitter, arguments); return obj;};
 		obj.emit = function () { emitter.emit.apply(emitter, arguments); return obj;};
 		return obj;
-	}
+	};
 
 
 	return { 
