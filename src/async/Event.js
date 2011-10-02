@@ -57,7 +57,9 @@
 		return events[eventName];
 	};
 
-	function EventEmitter() {
+	function EventEmitter(options) {
+        this.cfg = options || {};
+        this.cfg.timeout = this.cfg.timeout || 0;
 		this.__events = {};
 	}
 
@@ -66,13 +68,25 @@
 		event.on(callback);
 		return this;
 	};
+    
 	EventEmitter.prototype.emit = function (eventName) {
-		var event = getEvent(this.__events, eventName);
-		event.fire.apply(event, Array.prototype.splice.call(arguments, 1));
+		var event = getEvent(this.__events, eventName),
+            args = Array.prototype.splice.call(arguments, 1);
+        if (this.cfg.timeout > 0) {
+            //break the event loop
+            setTimeout(function () {
+		        event.fire.apply(event, args);
+            }, this.cfg.timeout);
+        } else {
+            event.fire.apply(event, args);
+        }
+
 		return this;
 	};
-	EventEmitter.mixin = function (obj) {
-		var emitter = new EventEmitter();
+    
+	EventEmitter.mixin = function (obj, options) {
+		var emitter = new EventEmitter(options);
+        
 		obj.on = function () { emitter.on.apply(emitter, arguments); return obj;};
 		obj.emit = function () { emitter.emit.apply(emitter, arguments); return obj;};
 		return obj;
