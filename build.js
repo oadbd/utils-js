@@ -2,7 +2,7 @@
 
 var fs = require('fs'),
     spawn = require('child_process').spawn,
-    flow = new (require('events').EventEmitter)();;
+    flow = new (require('events').EventEmitter)();
 
 var cfg = {
     buildDir:  __dirname + '/build',
@@ -28,14 +28,14 @@ var files = [
 
 var cleanup = function () {
     var rm = spawn('/usr/bin/rm', ['-rf', cfg.buildDir]);
-    rm.stdout.on(data, console.log);
-    rm.stderr.on(data, console.log);
+    rm.stdout.on('data', console.log);
+    rm.stderr.on('data', console.log);
     rm.on('exit', function (code) {
         if (code === 0) {
             flow.emit('clean');    
         }
     });
-}
+};
 
 var processFile = function (i, out) {
     if (files.length > i) {
@@ -65,5 +65,5 @@ flow.on('ready', function () {
 });
 
 
-flow.emit('clean');
-//flow.emit('ready');
+//flow.emit('clean');
+flow.emit('ready');
